@@ -1,4 +1,4 @@
-## Interface: 120100, 120105, 16001, 50504, 38001, 20506, 11509
+## Interface: 120100, 120105, 16001
 ## Title: Baganator - Reagent Bag Category
 ## Notes: Shows the contents of the reagent bag as its own category in Baganator's category view.
 ## Notes-deDE: Zeigt den Inhalt der Reagenzientasche in der Kategorie-Ansicht von Baganator als eigene Kategorie an.

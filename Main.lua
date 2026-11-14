@@ -14,7 +14,8 @@
 
 local ADDON_NAME = ...
 
-local REAGENT_BAG_ID = (Enum and Enum.BagIndex and Enum.BagIndex.ReagentBag) or 5
+-- nil on clients without a reagent bag - the addon stays inactive there
+local REAGENT_BAG_ID = Enum and Enum.BagIndex and Enum.BagIndex.ReagentBag
 -- Starts with "i:" so Baganator's export/editor code doesn't trip over it
 local KEY_PREFIX = "i:rbc:"
 local FRAME_PREFIX = "Baganator_CategoryViewBackpackViewFrame"
@@ -32,6 +33,7 @@ local L = {
   CREATED = "Category \"%s\" was created in the current Baganator profile.",
   EXISTS = "The category already exists in the current Baganator profile.",
   NO_PROFILE = "Baganator profile not found.",
+  NO_REAGENT_BAG = "This game version has no reagent bag - the addon is inactive.",
   INFO = "The category is created automatically on first start and placed at the top. You can change its name, colour, position etc. in Baganator's category settings as usual. Keep its priority high.\n\nIf the category was deleted, the button above recreates it.\n\nWorks for the currently logged in character (not in the offline view of other characters).",
   ENABLED_MSG = "Reagent bag as own category: |cff00ff00on|r",
   DISABLED_MSG = "Reagent bag as own category: |cffff0000off|r",
@@ -57,6 +59,7 @@ local translations = {
     CREATED = "Kategorie \"%s\" wurde im aktuellen Baganator-Profil angelegt.",
     EXISTS = "Die Kategorie existiert im aktuellen Baganator-Profil bereits.",
     NO_PROFILE = "Baganator-Profil nicht gefunden.",
+    NO_REAGENT_BAG = "Diese Spielversion hat keine Reagenzientasche - das Addon ist inaktiv.",
     INFO = "Die Kategorie wird beim ersten Start automatisch angelegt und ganz oben einsortiert. Name, Farbe, Position usw. kannst du danach ganz normal in Baganators Kategorie-Einstellungen ändern. Die Priorität sollte hoch bleiben.\n\nWurde die Kategorie gelöscht, legt der Knopf oben sie neu an.\n\nFunktioniert für den aktuell eingeloggten Charakter (nicht in der Offline-Ansicht anderer Charaktere).",
     ENABLED_MSG = "Reagenzientasche als eigene Kategorie: |cff00ff00an|r",
     DISABLED_MSG = "Reagenzientasche als eigene Kategorie: |cffff0000aus|r",
@@ -215,6 +218,10 @@ end
 -- Create the category in the current Baganator profile
 ---------------------------------------------------------------------------
 local function CreateCategory(silent)
+  if not REAGENT_BAG_ID then
+    if not silent then Print(L.NO_REAGENT_BAG) end
+    return false
+  end
   local profile = GetProfile()
   if not profile or type(profile.custom_categories) ~= "table" or type(profile.category_display_order) ~= "table" then
     if not silent then Print(L.NO_PROFILE) end
@@ -432,6 +439,10 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
   elseif event == "PLAYER_LOGIN" then
     self:UnregisterEvent("PLAYER_LOGIN")
     self:RegisterEvent("PLAYER_LOGOUT")
+    if not REAGENT_BAG_ID then
+      Print(L.NO_REAGENT_BAG)
+      return
+    end
     Print(L.LOADED)
     -- Baganator creates its windows on login; wait a moment, then hook in
     C_Timer.After(0, function()
