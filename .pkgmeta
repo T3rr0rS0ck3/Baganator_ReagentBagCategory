@@ -1,8 +1,7 @@
 package-as: Baganator_ReagentBagCategory
 
-# Nicht ins Addon-Paket (Dateien mit Punkt wie .git, .github und .pkgmeta werden automatisch ignoriert)
+# Not included in the addon package (dotfiles like .git, .github and .pkgmeta are ignored automatically)
 ignore:
   - Media/logo.png
   - README.md
   - CURSEFORGE.md
-  - CURSEFORGE_EN.md

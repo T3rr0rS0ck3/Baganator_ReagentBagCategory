@@ -1,41 +1,41 @@
 # Baganator - Reagent Bag Category
 
-**Zeigt den Inhalt der Reagenzientasche in Baganators Kategorie-Ansicht als eigene Kategorie an.**
+**Shows everything inside your reagent bag as its own category in Baganator's category view.**
 
-Normalerweise sortiert Baganator die Gegenstände aus der Reagenzientasche in die üblichen Kategorien ein – Kräuter landen bei „Handwerkswaren“, Fläschchen bei „Verbrauchsgüter“ usw. Dieses kleine Plugin hält sie zusammen: Alles aus der Reagenzientasche bekommt eine eigene Kategorie **Reagenzientasche**.
+Normally Baganator sorts the items from your reagent bag into the usual categories – herbs end up in "Trade Goods", flasks in "Consumables" and so on. This small plugin keeps them together: everything in the reagent bag gets its own **Reagent Bag** category.
 
 ---
 
 ## Features
 
-- Eigene Kategorie für alle Gegenstände in der Reagenzientasche
-- Wird beim ersten Start automatisch angelegt und ganz oben einsortiert
-- Name, Farbe und Position wie gewohnt in Baganators Kategorie-Einstellungen änderbar
-- Keine Änderungen an Baganator oder Syndicator nötig
-- Zuordnungen sind nur temporär – nichts wird dauerhaft in Baganators Einstellungen geschrieben
-- Deutsch und Englisch
+- Own category for all items in the reagent bag
+- Created automatically on first start and placed at the top
+- Rename, recolour or move it in Baganator's category settings like any other category
+- No changes to Baganator or Syndicator needed
+- Item assignments are temporary – nothing is permanently written into Baganator's settings
+- English and German
 
 ---
 
-## Befehle
+## Commands
 
-| Befehl | Funktion |
+| Command | Function |
 |---|---|
-| `/brk` | Öffnet die Einstellungen |
-| `/brk an` / `/brk aus` | Kategorie ein- oder ausschalten |
-| `/brk anlegen` | Kategorie im aktuellen Baganator-Profil (neu) anlegen |
-| `/reagenzientasche` | Wie `/brk` |
+| `/brk` | Opens the settings |
+| `/brk on` / `/brk off` | Turn the category on or off |
+| `/brk create` | (Re)create the category in the current Baganator profile |
+| `/reagenzientasche` | Same as `/brk` |
 
 ---
 
-## Hinweise
-- Benötigt **Baganator** und **Syndicator**.
-- Die Priorität der Kategorie sollte hoch bleiben.
-- Wurde die Kategorie gelöscht, holt `/brk anlegen` sie zurück.
-- Funktioniert für den eingeloggten Charakter (nicht in der Offline-Ansicht anderer Charaktere).
+## Notes
+- Requires **Baganator** and **Syndicator**.
+- Keep the category's priority high.
+- If you deleted the category, `/brk create` brings it back.
+- Works for the currently logged in character (not in the offline view of other characters).
 
 ---
 
 ## Feedback
 
-Fehler gefunden oder einen Vorschlag? Hinterlass gern einen Kommentar oder öffne ein Ticket – Feedback ist immer willkommen!
+Found a bug or have a suggestion? Feel free to leave a comment or open a ticket – feedback is always welcome!

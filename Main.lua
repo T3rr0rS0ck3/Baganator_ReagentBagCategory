@@ -1,21 +1,21 @@
--- Baganator - Reagenzientasche als Kategorie
+-- Baganator - Reagent Bag Category
 --
--- Plugin fuer Baganator: Items, die in der Reagenzientasche liegen, werden in
--- der Kategorie-Ansicht immer in einer eigenen Kategorie angezeigt - egal,
--- welcher Standardkategorie sie sonst angehoeren wuerden.
+-- Plugin for Baganator: items inside the reagent bag are always shown in their
+-- own category in the category view - regardless of which default category
+-- they would otherwise belong to.
 --
--- Funktionsweise (ohne Aenderungen an Baganator oder Syndicator):
---  1. Beim Aufbau der Kategorie-Ansicht bekommen Items aus der Reagenzientasche
---     einen eigenen Gruppierungs-Schluessel (wie es Baganator selbst z.B. fuer
---     verschlossene Schliesskassetten macht).
---  2. Diese Schluessel werden der Kategorie "Reagenzientasche" als "direkt
---     hinzugefuegte Items" zugeordnet - derselbe Mechanismus, den Baganator
---     beim Ziehen eines Items in eine Kategorie benutzt.
+-- How it works (without any changes to Baganator or Syndicator):
+--  1. While the category view is built, items from the reagent bag get their
+--     own grouping key (just like Baganator itself does e.g. for locked
+--     lockboxes).
+--  2. These keys are assigned to the "Reagent Bag" category as "directly
+--     added items" - the same mechanism Baganator uses when an item is
+--     dragged into a category.
 
 local ADDON_NAME = ...
 
 local REAGENT_BAG_ID = (Enum and Enum.BagIndex and Enum.BagIndex.ReagentBag) or 5
--- Beginnt mit "i:", damit Baganators Export-/Editor-Code nicht stolpert
+-- Starts with "i:" so Baganator's export/editor code doesn't trip over it
 local KEY_PREFIX = "i:rbc:"
 local FRAME_PREFIX = "Baganator_CategoryViewBackpackViewFrame"
 local MODS_FLAG = "rbcReagentBag"
@@ -93,7 +93,7 @@ local function RequestRefresh()
 end
 
 ---------------------------------------------------------------------------
--- Baganator-Profil / Kategorie finden
+-- Find the Baganator profile / category
 ---------------------------------------------------------------------------
 local function GetProfile()
   if BAGANATOR_CONFIG and BAGANATOR_CONFIG.Profiles and BAGANATOR_CURRENT_PROFILE then
@@ -139,7 +139,7 @@ local function ClearAllProfiles()
 end
 
 ---------------------------------------------------------------------------
--- Items der Reagenzientasche in der Kategorie-Ansicht abtrennen + zuordnen
+-- Split off reagent bag items in the category view and assign them
 ---------------------------------------------------------------------------
 local hooked = {}
 
@@ -157,7 +157,7 @@ local function MarkReagentBagItems(everything)
   end
 end
 
--- Laeuft direkt vor dem Zusammenstellen der Kategorien
+-- Runs right before the categories are assembled
 local function AttachReagentBagItems(everything)
   local _, mods = FindCategory(GetProfile())
   if not mods then
@@ -184,8 +184,8 @@ local function HookBackpackFrame(frame)
     return false
   end
   local original = splitter.ApplySplitting
-  -- Die Methode wurde per Mixin auf die Instanz kopiert, daher kann sie hier
-  -- ueberschrieben werden (die eingefrorene Mixin-Tabelle bleibt unberuehrt).
+  -- The method was copied onto the instance via Mixin, so it can be
+  -- overridden here (the frozen mixin table itself stays untouched).
   splitter.ApplySplitting = function(self, everything, callback, ...)
     MarkReagentBagItems(everything)
     return original(self, everything, function(...)
@@ -212,7 +212,7 @@ local function ScanForFrames()
 end
 
 ---------------------------------------------------------------------------
--- Kategorie im aktuellen Baganator-Profil anlegen
+-- Create the category in the current Baganator profile
 ---------------------------------------------------------------------------
 local function CreateCategory(silent)
   local profile = GetProfile()
@@ -239,7 +239,7 @@ local function CreateCategory(silent)
 
   profile.category_modifications = profile.category_modifications or {}
   profile.category_modifications[source] = {
-    priority = 3, -- hoechste Prioritaet im Baganator-Editor
+    priority = 3, -- highest priority in Baganator's editor
     showGroupPrefix = false,
     hideIn = {},
     [MODS_FLAG] = true,
@@ -249,7 +249,7 @@ local function CreateCategory(silent)
     profile.category_hidden[source] = false
   end
 
-  -- Ganz oben einsortieren, aber nach "Kuerzlich erhalten" (falls vorhanden)
+  -- Place at the very top, but after "Recent items" (if present)
   local order = profile.category_display_order
   local position = 1
   local recentIndex = tIndexOf(order, "default_auto_recents")
@@ -272,8 +272,8 @@ local function EnsureCategoryForCurrentProfile()
     return
   end
   BAGANATOR_RBC_CONFIG.createdForProfile = BAGANATOR_RBC_CONFIG.createdForProfile or {}
-  -- Nur einmal pro Profil automatisch anlegen. Loescht man die Kategorie
-  -- spaeter selbst, wird sie nicht ungefragt wieder erstellt.
+  -- Only create it automatically once per profile. If the user deletes the
+  -- category later, it is not recreated without being asked.
   if not BAGANATOR_RBC_CONFIG.createdForProfile[profileName] then
     if not FindCategory(profile) then
       CreateCategory(true)
@@ -283,7 +283,7 @@ local function EnsureCategoryForCurrentProfile()
 end
 
 ---------------------------------------------------------------------------
--- Optionen (Einstellungen > AddOns) und Slash-Befehl
+-- Options (Settings > AddOns) and slash command
 ---------------------------------------------------------------------------
 local settingsCategory
 local enableCheckbox
@@ -410,7 +410,7 @@ SlashCmdList["BAGANATORRBC"] = function(msg)
 end
 
 ---------------------------------------------------------------------------
--- Initialisierung
+-- Initialisation
 ---------------------------------------------------------------------------
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ADDON_LOADED")
@@ -427,24 +427,24 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
       Print(L.OPTIONS_ERROR .. tostring(err))
     end
   elseif event == "PLAYER_LOGOUT" then
-    -- Nur temporaere Zuordnungen - nicht dauerhaft in Baganators Einstellungen speichern
+    -- Assignments are temporary only - don't persist them in Baganator's settings
     ClearAllProfiles()
   elseif event == "PLAYER_LOGIN" then
     self:UnregisterEvent("PLAYER_LOGIN")
     self:RegisterEvent("PLAYER_LOGOUT")
     Print(L.LOADED)
-    -- Baganator erzeugt seine Fenster beim Login; kurz warten und dann einhaengen
+    -- Baganator creates its windows on login; wait a moment, then hook in
     C_Timer.After(0, function()
       EnsureCategoryForCurrentProfile()
       ScanForFrames()
     end)
     C_Timer.After(3, ScanForFrames)
 
-    -- Bei Skin-Wechsel erzeugt Baganator neue Fenster
+    -- Baganator creates new windows when the skin changes
     if Baganator.API.Skins and Baganator.API.Skins.RegisterListener then
       Baganator.API.Skins.RegisterListener(function(details)
-        -- Das Rucksackfenster meldet sich hier, bevor sein LayoutManager
-        -- existiert - daher erst im naechsten Frame einhaengen.
+        -- The backpack window reports here before its LayoutManager
+        -- exists - so hook in on the next frame.
         local region = details and details.region
         if type(region) == "table" and region.GetName then
           local name = region:GetName()

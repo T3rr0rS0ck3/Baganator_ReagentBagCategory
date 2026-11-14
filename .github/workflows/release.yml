@@ -1,10 +1,10 @@
 name: Release
 
-# Ein Tag wie v1.0.0 pushen -> Paket bauen, GitHub-Release erstellen und zu CurseForge hochladen.
-#   - Tag enthält "alpha" -> Alpha, enthält "beta" -> Beta, sonst Release
-#   - Die Version kommt aus dem Tag (@project-version@ in der .toc)
-#   - Upload zu CurseForge braucht "## X-Curse-Project-ID" in der .toc und das Secret CF_API_KEY
-# Manuell starten (workflow_dispatch) -> nur Paket bauen, nichts hochladen (ZIP als Artefakt zum Testen).
+# Push a tag like v1.0.0 -> build the package, create a GitHub release and upload it to CurseForge.
+#   - Tag contains "alpha" -> alpha, contains "beta" -> beta, otherwise release
+#   - The version is taken from the tag (@project-version@ in the .toc)
+#   - Uploading to CurseForge needs "## X-Curse-Project-ID" in the .toc and the secret CF_API_KEY
+# Manual run (workflow_dispatch) -> only build the package, upload nothing (zip as artifact for testing).
 on:
   push:
     tags:
@@ -23,19 +23,19 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0   # der Packager braucht die Historie für Changelog und Version
+          fetch-depth: 0   # the packager needs the history for changelog and version
 
-      - name: Paket bauen und veröffentlichen
+      - name: Build and publish package
         if: github.ref_type == 'tag'
         uses: BigWigsMods/packager@v2
 
-      - name: Paket nur bauen (Test)
+      - name: Build package only (test)
         if: github.ref_type != 'tag'
         uses: BigWigsMods/packager@v2
         with:
-          args: -d   # -d = nichts hochladen
+          args: -d   # -d = don't upload anything
 
-      - name: ZIP als Artefakt ablegen
+      - name: Upload zip as artifact
         uses: actions/upload-artifact@v6
         with:
           name: Baganator_ReagentBagCategory
