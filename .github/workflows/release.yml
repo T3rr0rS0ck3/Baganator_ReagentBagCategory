@@ -1,0 +1,43 @@
+name: Release
+
+# Ein Tag wie v1.0.0 pushen -> Paket bauen, GitHub-Release erstellen und zu CurseForge hochladen.
+#   - Tag enthält "alpha" -> Alpha, enthält "beta" -> Beta, sonst Release
+#   - Die Version kommt aus dem Tag (@project-version@ in der .toc)
+#   - Upload zu CurseForge braucht "## X-Curse-Project-ID" in der .toc und das Secret CF_API_KEY
+# Manuell starten (workflow_dispatch) -> nur Paket bauen, nichts hochladen (ZIP als Artefakt zum Testen).
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # der Packager braucht die Historie für Changelog und Version
+
+      - name: Paket bauen und veröffentlichen
+        if: github.ref_type == 'tag'
+        uses: BigWigsMods/packager@v2
+
+      - name: Paket nur bauen (Test)
+        if: github.ref_type != 'tag'
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -d   # -d = nichts hochladen
+
+      - name: ZIP als Artefakt ablegen
+        uses: actions/upload-artifact@v6
+        with:
+          name: Baganator_ReagentBagCategory
+          path: .release/*.zip
+          include-hidden-files: true
