@@ -40,7 +40,7 @@ Switch Baganator's backpack to the **category view** – the "Reagent Bag" categ
 | `/brk off` | Sort reagent bag items into the normal categories again |
 | `/brk create` | (Re)create the category in the current Baganator profile |
 | `/brk help` | List the commands in chat |
-| `/reagenzientasche` | Same as `/brk` |
+| `/reagentbag` | Same as `/brk` (German alias: `/reagenzientasche`) |
 
 Settings are also available under **Options → AddOns → Baganator - Reagent Bag Category**.
 

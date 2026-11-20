@@ -47,7 +47,7 @@ local L = {
     .. "|cffffd100/brk off|r  -  sort reagent bag items into the normal categories again\n"
     .. "|cffffd100/brk create|r  -  (re)create the category in the current Baganator profile\n"
     .. "|cffffd100/brk help|r  -  list the commands in chat\n\n"
-    .. "|cffffd100/reagenzientasche|r works as an alias for |cffffd100/brk|r.",
+    .. "|cffffd100/reagentbag|r works as an alias for |cffffd100/brk|r.",
 }
 
 local translations = {
@@ -398,7 +398,8 @@ local function OpenOptions()
 end
 
 SLASH_BAGANATORRBC1 = "/brk"
-SLASH_BAGANATORRBC2 = "/reagenzientasche"
+SLASH_BAGANATORRBC2 = "/reagentbag"
+SLASH_BAGANATORRBC3 = "/reagenzientasche"
 SlashCmdList["BAGANATORRBC"] = function(msg)
   msg = strtrim(msg or ""):lower()
   if msg == "an" or msg == "on" then

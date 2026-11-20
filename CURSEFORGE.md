@@ -24,7 +24,7 @@ Normally Baganator sorts the items from your reagent bag into the usual categori
 | `/brk` | Opens the settings |
 | `/brk on` / `/brk off` | Turn the category on or off |
 | `/brk create` | (Re)create the category in the current Baganator profile |
-| `/reagenzientasche` | Same as `/brk` |
+| `/reagentbag` | Same as `/brk` (German alias: `/reagenzientasche`) |
 
 ---
 
